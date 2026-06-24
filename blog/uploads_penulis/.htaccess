@@ -1,0 +1,7 @@
+# Cegah eksekusi skrip di folder upload
+php_flag engine off
+AddType text/plain .php .php3 .php4 .php5 .phtml .pht .phar
+
+<FilesMatch "\.(php|php3|php4|php5|phtml|pht|phar|cgi|pl|py|asp|aspx|sh)$">
+    Require all denied
+</FilesMatch>
