@@ -137,6 +137,17 @@ date_default_timezone_set('Asia/Jakarta');
     .form-row .form-group { flex: 1; }
     .preview-foto { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 2px solid var(--border); margin-top: 8px; }
     .modal-footer { padding: 16px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+    /* Modal konfirmasi hapus */
+    .konfirmasi-box { max-width: 380px; text-align: center; padding: 32px 28px 26px; }
+    .konfirmasi-ikon {
+        width: 72px; height: 72px; border-radius: 50%; background: #fee2e2;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 18px; font-size: 30px; animation: pop .15s ease;
+    }
+    .konfirmasi-box h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+    .konfirmasi-box p { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+    .konfirmasi-aksi { display: flex; gap: 12px; justify-content: center; }
+    .konfirmasi-aksi .btn { min-width: 110px; justify-content: center; padding: 11px 18px; }
     /* Toast */
     #toast-wrap { position: fixed; top: 20px; right: 20px; z-index: 200; display: flex; flex-direction: column; gap: 10px; }
     .toast {
@@ -186,6 +197,19 @@ date_default_timezone_set('Asia/Jakarta');
     </div>
 </div>
 
+<!-- Modal konfirmasi hapus -->
+<div class="modal-overlay" id="konfirmasi-overlay">
+    <div class="modal konfirmasi-box">
+        <div class="konfirmasi-ikon"><span>🗑️</span></div>
+        <h3 id="konfirmasi-judul">Hapus data ini?</h3>
+        <p id="konfirmasi-teks">Data yang dihapus tidak dapat dikembalikan.</p>
+        <div class="konfirmasi-aksi">
+            <button type="button" class="btn btn-ghost" id="konfirmasi-batal">Batal</button>
+            <button type="button" class="btn btn-danger" id="konfirmasi-ya">Ya, Hapus</button>
+        </div>
+    </div>
+</div>
+
 <div id="toast-wrap"></div>
 
 <script>
@@ -227,6 +251,27 @@ const App = (() => {
         document.getElementById('modal-body').innerHTML = '';
     }
     overlay.addEventListener('click', e => { if (e.target === overlay) tutupModal(); });
+
+    // Modal konfirmasi hapus — mengembalikan Promise<boolean>.
+    const kOverlay = document.getElementById('konfirmasi-overlay');
+    const kBatal   = document.getElementById('konfirmasi-batal');
+    const kYa      = document.getElementById('konfirmasi-ya');
+    function konfirmasi(teks, labelYa = 'Ya, Hapus') {
+        document.getElementById('konfirmasi-teks').textContent = teks;
+        kYa.textContent = labelYa;
+        kOverlay.classList.add('show');
+        return new Promise(resolve => {
+            function selesai(hasil) {
+                kOverlay.classList.remove('show');
+                kBatal.onclick = kYa.onclick = null;
+                kOverlay.onclick = null;
+                resolve(hasil);
+            }
+            kBatal.onclick = () => selesai(false);
+            kYa.onclick    = () => selesai(true);
+            kOverlay.onclick = e => { if (e.target === kOverlay) selesai(false); };
+        });
+    }
 
     // ================= NAVIGASI =================
     document.querySelectorAll('.menu-item').forEach(item => {
@@ -317,7 +362,7 @@ const App = (() => {
     }
 
     async function hapusPenulis(id) {
-        if (!confirm('Yakin ingin menghapus penulis ini?')) return;
+        if (!await konfirmasi('Data penulis yang dihapus tidak dapat dikembalikan.')) return;
         const fd = new FormData(); fd.append('id', id);
         const res = await kirim('hapus_penulis.php', fd);
         toast(res.pesan, res.sukses);
@@ -380,7 +425,7 @@ const App = (() => {
     }
 
     async function hapusKategori(id) {
-        if (!confirm('Yakin ingin menghapus kategori ini?')) return;
+        if (!await konfirmasi('Data kategori yang dihapus tidak dapat dikembalikan.')) return;
         const fd = new FormData(); fd.append('id', id);
         const res = await kirim('hapus_kategori.php', fd);
         toast(res.pesan, res.sukses);
@@ -478,7 +523,7 @@ const App = (() => {
     }
 
     async function hapusArtikel(id) {
-        if (!confirm('Yakin ingin menghapus artikel ini? Gambar juga akan dihapus.')) return;
+        if (!await konfirmasi('Artikel beserta gambarnya akan dihapus dan tidak dapat dikembalikan.')) return;
         const fd = new FormData(); fd.append('id', id);
         const res = await kirim('hapus_artikel.php', fd);
         toast(res.pesan, res.sukses);
