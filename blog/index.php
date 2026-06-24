@@ -105,6 +105,7 @@ date_default_timezone_set('Asia/Jakarta');
     .thumb { width: 64px; height: 44px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border); background:#e2e8f0; }
     .badge { background: #e0e7ff; color: #3730a3; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
     .muted { color: var(--muted); font-size: 12px; }
+    .hash { font-family: "Consolas", "Courier New", monospace; font-size: 12px; color: var(--muted); letter-spacing: .3px; }
     .kosong { text-align: center; padding: 40px; color: var(--muted); }
     .text-clip { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     /* Modal */
@@ -293,7 +294,7 @@ const App = (() => {
     async function renderPenulis() {
         konten.innerHTML = `
             <div class="panel-head">
-                <h2>👤 Kelola Penulis</h2>
+                <h2> Data Penulis</h2>
                 <button class="btn btn-primary" onclick="App.formPenulis()">+ Tambah Penulis</button>
             </div>
             <div class="card"><div class="spinner">Memuat data…</div></div>`;
@@ -304,7 +305,7 @@ const App = (() => {
                 <td><img class="avatar" src="${p.foto_url}" alt="foto" onerror="this.src='uploads_penulis/default.png'"></td>
                 <td><strong>${p.nama}</strong></td>
                 <td>${p.user_name}</td>
-                <td><span class="muted">••••••••</span> <span class="badge">bcrypt</span></td>
+                <td><code class="hash">${p.password_preview}</code></td>
                 <td class="aksi">
                     <button class="btn btn-ghost btn-sm" onclick="App.formPenulis(${p.id})">Edit</button>
                     <button class="btn btn-danger btn-sm" onclick="App.hapusPenulis(${p.id})">Hapus</button>
@@ -373,7 +374,7 @@ const App = (() => {
     async function renderKategori() {
         konten.innerHTML = `
             <div class="panel-head">
-                <h2>🏷️ Kelola Kategori Artikel</h2>
+                <h2> Data Kategori Artikel</h2>
                 <button class="btn btn-primary" onclick="App.formKategori()">+ Tambah Kategori</button>
             </div>
             <div class="card"><div class="spinner">Memuat data…</div></div>`;
@@ -436,7 +437,7 @@ const App = (() => {
     async function renderArtikel() {
         konten.innerHTML = `
             <div class="panel-head">
-                <h2>📰 Kelola Artikel</h2>
+                <h2> Data Artikel</h2>
                 <button class="btn btn-primary" onclick="App.formArtikel()">+ Tambah Artikel</button>
             </div>
             <div class="card"><div class="spinner">Memuat data…</div></div>`;
