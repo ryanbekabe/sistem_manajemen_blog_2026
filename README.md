@@ -13,6 +13,6 @@ git push -u origin main
 
 Demo : https://ablogsonofjhonsyarif.kotapalangkaraya.my.id/
 
-Server powered by: kotapalangkaraya.my.id - [hanyajasa.com](https://hanyajasa.com/)
+Server powered by: [kotapalangkaraya.my.id](https://kotapalangkaraya.my.id/) - [hanyajasa.com](https://hanyajasa.com/)
 
 Email: hanyajasa@gmail.com
