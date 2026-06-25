@@ -11,7 +11,7 @@ date_default_timezone_set('Asia/Jakarta');
 // ---- Konfigurasi koneksi ----
 const DB_HOST = 'localhost';
 const DB_USER = 'root';
-const DB_PASS = 'root';
+const DB_PASS = 'Root12342024!';
 const DB_NAME = 'db_blog';
 
 // Lapor error mysqli sebagai exception agar mudah ditangani.
